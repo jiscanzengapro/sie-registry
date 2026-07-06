@@ -1,0 +1,120 @@
+{
+  "registry_version": "1.0",
+  "created_at": "2026-07-06",
+  "promotion_rule": {
+    "evaluation_windows": [
+      "1-15 janvier",
+      "trêve internationale de mars",
+      "intersaison de juillet",
+      "trêve d'octobre"
+    ],
+    "criteria": {
+      "P1_min_matches_live": 100,
+      "P1_note": "jamais backtest, challenger inchangé (même hash) sur toute la période",
+      "P2_min_brier_gap": -0.005,
+      "P3_holm_adjusted_p_max": 0.05,
+      "P3_note": "test unilatéral, bootstrap concordant requis (IC ajusté entièrement négatif)",
+      "P4_max_ece_gap": 0.01
+    },
+    "emergency_brake": "gel immédiat si Brier glissant du champion sur 100 matchs > plancher naïf",
+    "version_upgrade_distinct_from_promotion": true,
+    "version_upgrade_shadow_matches": 50,
+    "version_upgrade_rollback_threshold": 0.02
+  },
+  "n_thresholds": {
+    "describe": 20,
+    "show": 50,
+    "decide": 100
+  },
+  "perimeters": {
+    "international": {
+      "status": "labo, non commercialisé",
+      "markets": {
+        "1X2": {
+          "champion_model_key": "elo-davidson-wc-v1",
+          "champion_hash": "sha256:61a5362a3c690d097f1acbf5efbdc12b0c47dc5660a",
+          "designated_at": "2026-07-06",
+          "frozen_at": "2026-06-27",
+          "designation_reason": "désigné avant l'existence des challengers, pas mesuré meilleur",
+          "next_review": "trêve d'octobre 2026",
+          "challengers": [
+            {
+              "model_key": "elo-davidson-wc-gd",
+              "hash": "sha256:be2f3e1da9e3f841b2df2db3dfee43b813f9afac78b",
+              "status": "challenger en tête",
+              "n_live": "insuffisant pour décision au 2026-07-06"
+            },
+            {
+              "model_key": "elo-davidson-wc-ens",
+              "hash": "sha256:81877bd1c69ce8294b414842aff918b6548f7603eae",
+              "status": "challenger"
+            },
+            {
+              "model_key_family": ["elo-davidson-wc-l10", "elo-davidson-wc-l11",
+                "elo-davidson-wc-l12", "elo-davidson-wc-l13", "elo-davidson-wc-l14",
+                "elo-davidson-wc-w24", "elo-davidson-wc-w24t",
+                "elo-davidson-wc-hfa", "elo-davidson-wc-hfat"],
+              "status": "R&D interne, hors course à la promotion"
+            }
+          ]
+        },
+        "score_exact": {
+          "champion_model_key": "elo-davidson-wc-poisson",
+          "champion_hash": "sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88",
+          "designated_at": "2026-07-06",
+          "frozen_at": "2026-07-01",
+          "next_review": "trêve d'octobre 2026",
+          "challengers": [
+            {
+              "model_key": "elo-davidson-wc-poisson-v2",
+              "hash": "sha256:10d9fed95c564824df17aa8846e2fb21b07950cd14e",
+              "status": "montée de version en surveillance",
+              "informal_test_n": 88,
+              "informal_test_brier_gap": -0.0075,
+              "informal_test_ci_95": [-0.0130, -0.0020],
+              "informal_test_note": "résultat directionnel, pas une promotion (n<100, méthode simplifiée)"
+            }
+          ]
+        },
+        "over_under": {
+          "champion_model_key": "elo-davidson-wc-poisson",
+          "champion_hash": "sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88",
+          "designated_at": "2026-07-06",
+          "frozen_at": "2026-07-01",
+          "next_review": "trêve d'octobre 2026",
+          "challengers": [
+            {
+              "model_key": "elo-davidson-wc-poisson-v2",
+              "hash": "sha256:10d9fed95c564824df17aa8846e2fb21b07950cd14e",
+              "status": "montée de version en surveillance"
+            }
+          ]
+        }
+      }
+    },
+    "premier_league": {
+      "status": "produit, lancement 2026-08-21",
+      "markets": {
+        "1X2": {
+          "champion_model_key": "elo-davidson-v1",
+          "champion_hash": "sha256:93cf543817f538b96141f95d43ed5026458dab7a0f74a0b6b6f5f2fc2d4ac6cc",
+          "champion_hash_field_name_note": "state_hash côté PL, integrity_hash côté international — même mécanisme, nommage différent",
+          "designated_at": "2026-07-06",
+          "frozen_at": "2026-06 (backtest 4180 matchs)",
+          "next_review": "trêve d'octobre 2026"
+        },
+        "score_exact": {
+          "champion_model_key": null,
+          "designation_engaged_by": "2026-08-14"
+        },
+        "over_under": {
+          "champion_model_key": null,
+          "designation_engaged_by": "2026-08-14"
+        }
+      }
+    }
+  },
+  "revision_history": [
+    {"date": "2026-07-06", "change": "Création — désignations initiales, règle de promotion v1.0"}
+  ]
+}
