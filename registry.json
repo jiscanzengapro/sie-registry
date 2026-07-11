@@ -69,10 +69,22 @@
               "model_key": "elo-davidson-wc-poisson-v2",
               "hash": "sha256:10d9fed95c564824df17aa8846e2fb21b07950cd14e",
               "status": "montée de version en surveillance",
-              "informal_test_n": 88,
-              "informal_test_brier_gap": -0.0075,
-              "informal_test_ci_95": [-0.0130, -0.0020],
-              "informal_test_note": "résultat directionnel, pas une promotion (n<100, méthode simplifiée)"
+              "measurement_history": {
+                "2026-07-06_contaminated": {
+                  "n": 88,
+                  "brier_gap_vs_v1": -0.0075,
+                  "ci_95": [-0.0130, -0.0020],
+                  "issue": "état non coupé au 10/06 - forces calculées sur historique incluant des matchs CdM re-prédits, mesure invalidée le 11/07"
+                },
+                "2026-07-11_decontaminated": {
+                  "model_key_used": "elo-davidson-wc-poisson-v2-backtest",
+                  "n": 98,
+                  "brier_vs_fifa": -0.0155,
+                  "champion_v1_brier_vs_fifa_same_date": -0.0191,
+                  "note": "forces figées strictement au 10/06/2026, sweep et holdout inchangés (déjà propres). C'est la mesure méthodologiquement correcte."
+                }
+              },
+              "informal_test_note": "résultat directionnel, pas une promotion (n<100, méthode simplifiée) sur les deux mesures"
             }
           ]
         },
@@ -115,6 +127,7 @@
     }
   },
   "revision_history": [
-    {"date": "2026-07-06", "change": "Création — désignations initiales, règle de promotion v1.0"}
+    {"date": "2026-07-06", "change": "Création — désignations initiales, règle de promotion v1.0"},
+    {"date": "2026-07-11", "change": "Correction de la mesure poisson-v2 : la comparaison du 6 juillet (n=88, -0.0075) était contaminée méthodologiquement (état non coupé au 10/06). Mesure décontaminée produite et publiée : -0.0155 vs FIFA (n=98). Aucun impact sur les désignations de champions (déjà correctement non-promues)."}
   ]
 }

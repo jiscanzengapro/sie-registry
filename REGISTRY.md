@@ -78,11 +78,26 @@ la règle n'est pas remplie.
   (hash `sha256:10d9fed95c564824df17aa8846e2fb21b07950cd14e...`) — montée
   de version du champion (shrinkage bayésien vers la confédération +
   pondération temporelle + covariable de palier de compétition), gelée le
-  6 juillet 2026. Comparaison informelle vs champion sur n=88 matchs
-  communs : Brier −0,0075 en faveur de v2 (IC 95% bootstrap entièrement
-  négatif). **Résultat directionnel, pas une promotion** — n<100, une
-  seule comparaison, méthode simplifiée (pas le protocole complet prévu
-  pour septembre 2026). Surveillance en cours avant confirmation.
+  6 juillet 2026.
+
+  **⚠️ Historique de mesure — correction du 11 juillet 2026** : une
+  première comparaison informelle du 6 juillet (n=88, Brier −0,0075 en
+  faveur de v2) s'est révélée **contaminée méthodologiquement** — l'état
+  gelé utilisé pour cette mesure n'était pas coupé au 10/06 (protocole de
+  backtest propre) mais calculé sur tout l'historique jusqu'au jour même,
+  incluant donc une partie des matchs de CdM qu'il re-prédisait. Une
+  version décontaminée (`elo-davidson-wc-poisson-v2-backtest`, forces
+  figées strictement au 10/06/2026, sweep et holdout inchangés — ils
+  étaient déjà propres) a été produite et mesurée le 11 juillet :
+  **Brier −0,0155 vs FIFA sur n=98 matchs** (comparativement, le champion
+  v1 obtient −0,0191 sur n=94 — v2 reste donc un progrès réel, mais plus
+  modeste que la première mesure ne le suggérait : l'optimisme de la
+  mesure contaminée était d'environ 0,0068 en Brier).
+
+  **Résultat toujours directionnel, jamais une promotion** — n<100 sur les
+  deux mesures, une seule comparaison, méthode simplifiée (pas le
+  protocole complet à correction Holm prévu pour septembre 2026).
+  Surveillance en cours avant toute confirmation.
 
 ### Les trois seuils n (jamais confondus)
 
@@ -119,3 +134,4 @@ final est déjà un acte de pré-enregistrement** : cette date ne pourra pas
 | Date | Changement |
 |---|---|
 | 2026-07-06 | Création — désignations initiales, règle de promotion v1.0 |
+| 2026-07-11 | Correction de la mesure poisson-v2 : la comparaison du 6 juillet (n=88, −0,0075) était contaminée méthodologiquement (état non coupé au 10/06). Mesure décontaminée produite et publiée : −0,0155 vs FIFA (n=98). Aucun impact sur les désignations de champions (déjà correctement non-promues). |
