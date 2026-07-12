@@ -80,24 +80,36 @@ la règle n'est pas remplie.
   pondération temporelle + covariable de palier de compétition), gelée le
   6 juillet 2026.
 
-  **⚠️ Historique de mesure — correction du 11 juillet 2026** : une
-  première comparaison informelle du 6 juillet (n=88, Brier −0,0075 en
-  faveur de v2) s'est révélée **contaminée méthodologiquement** — l'état
-  gelé utilisé pour cette mesure n'était pas coupé au 10/06 (protocole de
-  backtest propre) mais calculé sur tout l'historique jusqu'au jour même,
-  incluant donc une partie des matchs de CdM qu'il re-prédisait. Une
-  version décontaminée (`elo-davidson-wc-poisson-v2-backtest`, forces
-  figées strictement au 10/06/2026, sweep et holdout inchangés — ils
-  étaient déjà propres) a été produite et mesurée le 11 juillet :
-  **Brier −0,0155 vs FIFA sur n=98 matchs** (comparativement, le champion
-  v1 obtient −0,0191 sur n=94 — v2 reste donc un progrès réel, mais plus
-  modeste que la première mesure ne le suggérait : l'optimisme de la
-  mesure contaminée était d'environ 0,0068 en Brier).
+  **⚠️ Historique de mesure — deux corrections successives.**
 
-  **Résultat toujours directionnel, jamais une promotion** — n<100 sur les
-  deux mesures, une seule comparaison, méthode simplifiée (pas le
-  protocole complet à correction Holm prévu pour septembre 2026).
-  Surveillance en cours avant toute confirmation.
+  *Mesure 1 (6 juillet, invalidée)* : comparaison informelle vs champion
+  sur n=88 matchs, Brier −0,0075 en faveur de v2. **Invalidée le 11
+  juillet** : l'état gelé utilisé n'était pas coupé au 10/06 (protocole
+  de backtest propre) mais calculé sur tout l'historique jusqu'au jour
+  même — contamination par les résultats de la CdM re-prédite.
+
+  *Mesure 2 (11 juillet, invalidée)* : un état décontaminé
+  (`elo-davidson-wc-poisson-v2-backtest`, coupure stricte 10/06/2026) a
+  été comparé séparément à FIFA (−0,0155 vs −0,0191 pour v1) et
+  interprété comme "v2 est un progrès réel". **Invalidée le 12 juillet** :
+  ces deux écarts vs FIFA étaient mesurés sur des ensembles de matchs
+  différents (94 vs 98) — pas une comparaison appariée. Un écart entre
+  deux nombres non appariés ne mesure rien de fiable.
+
+  *Mesure 3 (12 juillet, VALIDE — méthode correcte)* : test apparié
+  direct v2-backtest vs v1, sur les 93 matchs communs aux deux modèles,
+  états décontaminés des deux côtés. **Différence moyenne : −0,0006
+  (quasi nulle). IC 95% bootstrap : [−0,0057 ; +0,0044] — contient zéro.
+  p ≈ 0,40.** Verdict : **v2 et v1 sont statistiquement indiscernables
+  sur cet échantillon** — l'amélioration précédemment annoncée n'est pas
+  soutenue par une mesure correctement appariée.
+
+  **Aucune promotion, aucun changement de champion — v1 reste champion.**
+  Les gains attendus du shrinkage restent réels sur des cas spécifiques
+  documentés ailleurs (ex. Cape Verde, désormais couvert par les 92→98
+  matchs backfillés), mais ne se traduisent pas en gain global mesurable
+  à ce stade. n<100 sur toute mesure — seuil de décision non atteint.
+  Prochaine mesure : protocole complet de septembre (Holm, n≥100).
 
 ### Les trois seuils n (jamais confondus)
 
@@ -123,6 +135,16 @@ de nommage entre les deux pipelines, sans conséquence sur la validité du
 mécanisme lui-même. Les deux garantissent la même chose : toute
 modification manuelle de l'état invalide le hash.
 
+---
+
+## Historique des révisions de ce document
+
+| Date | Changement |
+|---|---|
+| 2026-07-06 | Création — désignations initiales, règle de promotion v1.0 |
+| 2026-07-11 | Correction n°1 de la mesure poisson-v2 : la comparaison du 6 juillet (n=88, −0,0075) était contaminée méthodologiquement (état non coupé au 10/06). Mesure décontaminée produite (−0,0155 vs FIFA, n=98). |
+| 2026-07-12 | Correction n°2 de la mesure poisson-v2 : la mesure du 11 juillet comparait deux écarts vs FIFA sur des ensembles de matchs différents (94 vs 98) — pas une comparaison appariée. Test apparié correct produit sur 93 matchs communs (états décontaminés des deux côtés) : différence quasi nulle (−0,0006), IC 95% contenant zéro. **v1 et v2 sont statistiquement indiscernables — aucune promotion.** Cette double correction est documentée intégralement (rien supprimé) conformément à la règle : le REGISTRY porte des résultats validés et leurs corrections, jamais des brouillons non vérifiés — une leçon qui s'applique à la publication future de toute mesure informelle. |
+
 **Pré-enregistrer une date de désignation avant même d'avoir le modèle
 final est déjà un acte de pré-enregistrement** : cette date ne pourra pas
 être repoussée sans qu'un commit visible ne l'explique.
@@ -134,4 +156,3 @@ final est déjà un acte de pré-enregistrement** : cette date ne pourra pas
 | Date | Changement |
 |---|---|
 | 2026-07-06 | Création — désignations initiales, règle de promotion v1.0 |
-| 2026-07-11 | Correction de la mesure poisson-v2 : la comparaison du 6 juillet (n=88, −0,0075) était contaminée méthodologiquement (état non coupé au 10/06). Mesure décontaminée produite et publiée : −0,0155 vs FIFA (n=98). Aucun impact sur les désignations de champions (déjà correctement non-promues). |
