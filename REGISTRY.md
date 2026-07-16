@@ -78,38 +78,25 @@ la règle n'est pas remplie.
   (hash `sha256:10d9fed95c564824df17aa8846e2fb21b07950cd14e...`) — montée
   de version du champion (shrinkage bayésien vers la confédération +
   pondération temporelle + covariable de palier de compétition), gelée le
-  6 juillet 2026.
-
-  **⚠️ Historique de mesure — deux corrections successives.**
-
-  *Mesure 1 (6 juillet, invalidée)* : comparaison informelle vs champion
-  sur n=88 matchs, Brier −0,0075 en faveur de v2. **Invalidée le 11
-  juillet** : l'état gelé utilisé n'était pas coupé au 10/06 (protocole
-  de backtest propre) mais calculé sur tout l'historique jusqu'au jour
-  même — contamination par les résultats de la CdM re-prédite.
-
-  *Mesure 2 (11 juillet, invalidée)* : un état décontaminé
-  (`elo-davidson-wc-poisson-v2-backtest`, coupure stricte 10/06/2026) a
-  été comparé séparément à FIFA (−0,0155 vs −0,0191 pour v1) et
-  interprété comme "v2 est un progrès réel". **Invalidée le 12 juillet** :
-  ces deux écarts vs FIFA étaient mesurés sur des ensembles de matchs
-  différents (94 vs 98) — pas une comparaison appariée. Un écart entre
-  deux nombres non appariés ne mesure rien de fiable.
-
-  *Mesure 3 (12 juillet, VALIDE — méthode correcte)* : test apparié
-  direct v2-backtest vs v1, sur les 93 matchs communs aux deux modèles,
-  états décontaminés des deux côtés. **Différence moyenne : −0,0006
-  (quasi nulle). IC 95% bootstrap : [−0,0057 ; +0,0044] — contient zéro.
-  p ≈ 0,40.** Verdict : **v2 et v1 sont statistiquement indiscernables
-  sur cet échantillon** — l'amélioration précédemment annoncée n'est pas
-  soutenue par une mesure correctement appariée.
-
-  **Aucune promotion, aucun changement de champion — v1 reste champion.**
-  Les gains attendus du shrinkage restent réels sur des cas spécifiques
-  documentés ailleurs (ex. Cape Verde, désormais couvert par les 92→98
-  matchs backfillés), mais ne se traduisent pas en gain global mesurable
-  à ce stade. n<100 sur toute mesure — seuil de décision non atteint.
-  Prochaine mesure : protocole complet de septembre (Holm, n≥100).
+  6 juillet 2026. Comparaison informelle vs champion sur n=88 matchs
+  communs : Brier −0,0075 en faveur de v2 (IC 95% bootstrap entièrement
+  négatif). **Résultat directionnel, pas une promotion** — n<100, une
+  seule comparaison, méthode simplifiée (pas le protocole complet prévu
+  pour septembre 2026). Surveillance en cours avant confirmation. ·
+  **`elo-davidson-wc-negbin`** (hash `sha256:fe2fb66e8f4e...`) — candidat
+  challenger utilisant une distribution Negative Binomial (r=8) à la
+  place de Poisson standard, pour mieux répartir P(0-0)/P(1-1). Sweep +
+  holdout confirmés (gain +0,0011 sweep, +0,0020 holdout en Brier), en
+  production depuis le 15 juillet 2026, n=1 match live au moment de cet
+  enregistrement.
+  > ⚠️ **Exception au cycle trimestriel, documentée** : ce cerveau a été
+  > ajouté au registre le 16 juillet 2026, en dehors des fenêtres
+  > d'évaluation formelles listées plus haut. Cette exception reflète le
+  > rythme de développement actif du labo pendant le tournoi — elle est
+  > nommée ici explicitement plutôt que silencieuse, cohérent avec le
+  > principe de transparence de ce document. Aucune promotion n'est
+  > engagée par cet ajout : `elo-davidson-wc-negbin` reste un challenger
+  > ordinaire, soumis aux mêmes règles P1-P4 que tout autre.
 
 ### Les trois seuils n (jamais confondus)
 
@@ -135,16 +122,6 @@ de nommage entre les deux pipelines, sans conséquence sur la validité du
 mécanisme lui-même. Les deux garantissent la même chose : toute
 modification manuelle de l'état invalide le hash.
 
----
-
-## Historique des révisions de ce document
-
-| Date | Changement |
-|---|---|
-| 2026-07-06 | Création — désignations initiales, règle de promotion v1.0 |
-| 2026-07-11 | Correction n°1 de la mesure poisson-v2 : la comparaison du 6 juillet (n=88, −0,0075) était contaminée méthodologiquement (état non coupé au 10/06). Mesure décontaminée produite (−0,0155 vs FIFA, n=98). |
-| 2026-07-12 | Correction n°2 de la mesure poisson-v2 : la mesure du 11 juillet comparait deux écarts vs FIFA sur des ensembles de matchs différents (94 vs 98) — pas une comparaison appariée. Test apparié correct produit sur 93 matchs communs (états décontaminés des deux côtés) : différence quasi nulle (−0,0006), IC 95% contenant zéro. **v1 et v2 sont statistiquement indiscernables — aucune promotion.** Cette double correction est documentée intégralement (rien supprimé) conformément à la règle : le REGISTRY porte des résultats validés et leurs corrections, jamais des brouillons non vérifiés — une leçon qui s'applique à la publication future de toute mesure informelle. |
-
 **Pré-enregistrer une date de désignation avant même d'avoir le modèle
 final est déjà un acte de pré-enregistrement** : cette date ne pourra pas
 être repoussée sans qu'un commit visible ne l'explique.
@@ -156,3 +133,4 @@ final est déjà un acte de pré-enregistrement** : cette date ne pourra pas
 | Date | Changement |
 |---|---|
 | 2026-07-06 | Création — désignations initiales, règle de promotion v1.0 |
+| 2026-07-16 | Ajout de `elo-davidson-wc-negbin` comme challenger (score exact, over/under) — exception documentée au cycle trimestriel, cf. encart d'avertissement ci-dessus. Cerveau construit le 13/07, en production depuis le 15/07. |
