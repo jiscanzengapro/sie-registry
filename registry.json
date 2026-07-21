@@ -1,5 +1,5 @@
 {
-  "registry_version": "1.0",
+  "registry_version": "1.1",
   "created_at": "2026-07-06",
   "promotion_rule": {
     "evaluation_windows": [
@@ -50,6 +50,13 @@
               "status": "challenger"
             },
             {
+              "model_key": "elo-davidson-wc-v2",
+              "hash": "sha256:e3d1c53a8beaedc6b0c9fd78b2497d8a5769dab19d1b6c97589b58e6d2bc3ce4",
+              "status": "challenger officielle (recalibrée)",
+              "registry_note_added_at": "2026-07-21",
+              "correction_note": "Cerveau existant et actif dans predictor_intl.py depuis la création du registre (06/07/2026) — son absence ici jusqu'à ce jour était un oubli d'enregistrement, pas une exclusion voulue. Corrigé le 21/07/2026, découvert lors d'un audit de cohérence du registre public."
+            },
+            {
               "model_key_family": ["elo-davidson-wc-l10", "elo-davidson-wc-l11",
                 "elo-davidson-wc-l12", "elo-davidson-wc-l13", "elo-davidson-wc-l14",
                 "elo-davidson-wc-w24", "elo-davidson-wc-w24t",
@@ -67,12 +74,13 @@
           "challengers": [
             {
               "model_key": "elo-davidson-wc-poisson-v2",
-              "hash": "sha256:10d9fed95c564824df17aa8846e2fb21b07950cd14e",
+              "hash": "sha256:b5684ab44fd3cdac2c584519ba673fcaa336156b8c81cbfbddf29bbbc3d7edc0",
               "status": "montée de version en surveillance",
               "informal_test_n": 88,
               "informal_test_brier_gap": -0.0075,
               "informal_test_ci_95": [-0.0130, -0.0020],
-              "informal_test_note": "résultat directionnel, pas une promotion (n<100, méthode simplifiée)"
+              "informal_test_note": "résultat directionnel du 06/07/2026, pas une promotion (n<100, méthode simplifiée) — inchangé depuis",
+              "update_20260721": "Note d'intégrité : le hash publié entre le 06/07 et le 21/07 (sha256:10d9fed9...) correspondait à un état antérieur à la correction de la contamination méthodologique du 11-12/07/2026 (cf. reentraînement, coupure stricte ajoutée) — jamais republié entre-temps sur ce registre. Confirmé par vérification directe des métadonnées du fichier (date de création 06/07, dernière modification 12/07 — écrasement sur place, aucune copie de l'ancienne version conservée). Le hash actuel (sha256:b5684ab4...) correspond à l'état décontaminé, celui réellement utilisé pour le backfilling du 20/07 et la production depuis le 21/07. Backfilling walk-forward complet sur 104/104 matchs CdM effectué le 20/07/2026. Branché dans predictor_intl.py/STATE_FILES le 21/07/2026 (absent du dépôt de code jusque-là — jamais poussé, cause racine corrigée). ATTENTION : predictor_intl.py ne prédit que la compétition 'world-cup' ; la Coupe du Monde étant terminée, aucun nouveau match live ne viendra plus alimenter ce cerveau via ce prédicteur tant qu'il n'est pas repointé vers un autre calendrier international. L'échantillon informel reste donc figé à n=88, sans progression prévue vers le seuil n≥100 à ce stade."
             },
             {
               "model_key": "elo-davidson-wc-negbin",
@@ -84,6 +92,36 @@
               "mechanism": "Distribution Negative Binomial (r=8) remplaçant Poisson standard pour mieux répartir P(0-0)/P(1-1)",
               "sweep_test": "sweep + holdout confirmés (gain +0,0011 sweep, +0,0020 holdout en Brier)",
               "n_live_at_registration": 1
+            },
+            {
+              "model_key": "elo-davidson-wc-poisson-mle",
+              "hash": "sha256:75394327be9560644f8e73592de58406f19c505f012fe027ac9ffc9c248a22e0",
+              "status": "challenger",
+              "added_at": "2026-07-19",
+              "registry_note_added_at": "2026-07-21",
+              "mechanism": "Estimation MLE (espace log, attack+defense+home_adv), gradient analytique + régularisation ridge — remplace les forces Poisson par moyennes simples de v1",
+              "n_live_at_registration": "103-104 (fin de tournoi)",
+              "exception_note": "Ajouté au registre avec retard (construit le 19/07, enregistré le 21/07) — même principe de transparence que l'exception negbin du 16/07 : nommé explicitement, pas silencieux."
+            },
+            {
+              "model_key": "elo-davidson-wc-negbin-mle",
+              "hash": "sha256:0ea7febcef1cd3c97b5e5fa7681bf1db16ea2d9c1d79b45d6a61980284eb1fd6",
+              "status": "challenger",
+              "added_at": "2026-07-19",
+              "registry_note_added_at": "2026-07-21",
+              "mechanism": "Même moteur MLE que poisson-mle, distribution Negative Binomial (r=8) à la place de Poisson pour la répartition des scores",
+              "n_live_at_registration": "103-104 (fin de tournoi)",
+              "exception_note": "Voir note complète sur poisson-mle — même retard d'enregistrement, même principe de transparence."
+            },
+            {
+              "model_key": "elo-davidson-wc-ens-mle",
+              "hash": "sha256:96bb9ead900891cb3af0f160a411f1860e7ed86d37a54bc57bc6730dc3f5bc9f",
+              "status": "challenger",
+              "added_at": "2026-07-19",
+              "registry_note_added_at": "2026-07-21",
+              "mechanism": "Ensemble Elo (gd) + Poisson MLE, sous-composantes mises à jour séparément puis recombinées avec poids w figé",
+              "n_live_at_registration": "103-104 (fin de tournoi)",
+              "exception_note": "Voir note complète sur poisson-mle — même retard d'enregistrement, même principe de transparence."
             }
           ]
         },
@@ -96,8 +134,8 @@
           "challengers": [
             {
               "model_key": "elo-davidson-wc-poisson-v2",
-              "hash": "sha256:10d9fed95c564824df17aa8846e2fb21b07950cd14e",
-              "status": "montée de version en surveillance"
+              "hash": "sha256:b5684ab44fd3cdac2c584519ba673fcaa336156b8c81cbfbddf29bbbc3d7edc0",
+              "status": "montée de version en surveillance — voir update_20260721 dans la section score_exact"
             },
             {
               "model_key": "elo-davidson-wc-negbin",
@@ -107,6 +145,24 @@
               "registry_note_added_at": "2026-07-16",
               "exception_note": "Voir note complète dans la section score_exact — même cerveau, même exception documentée.",
               "n_live_at_registration": 1
+            },
+            {
+              "model_key": "elo-davidson-wc-poisson-mle",
+              "hash": "sha256:75394327be9560644f8e73592de58406f19c505f012fe027ac9ffc9c248a22e0",
+              "status": "challenger — voir détails dans la section score_exact",
+              "registry_note_added_at": "2026-07-21"
+            },
+            {
+              "model_key": "elo-davidson-wc-negbin-mle",
+              "hash": "sha256:0ea7febcef1cd3c97b5e5fa7681bf1db16ea2d9c1d79b45d6a61980284eb1fd6",
+              "status": "challenger — voir détails dans la section score_exact",
+              "registry_note_added_at": "2026-07-21"
+            },
+            {
+              "model_key": "elo-davidson-wc-ens-mle",
+              "hash": "sha256:96bb9ead900891cb3af0f160a411f1860e7ed86d37a54bc57bc6730dc3f5bc9f",
+              "status": "challenger — voir détails dans la section score_exact",
+              "registry_note_added_at": "2026-07-21"
             }
           ]
         }
@@ -136,6 +192,7 @@
   },
   "revision_history": [
     {"date": "2026-07-06", "change": "Création — désignations initiales, règle de promotion v1.0"},
-    {"date": "2026-07-16", "change": "Ajout de elo-davidson-wc-negbin comme challenger (score_exact, over_under) — exception documentée au cycle trimestriel, cf. exception_note. Cerveau construit le 13/07, en production depuis le 15/07."}
+    {"date": "2026-07-16", "change": "Ajout de elo-davidson-wc-negbin comme challenger (score_exact, over_under) — exception documentée au cycle trimestriel, cf. exception_note. Cerveau construit le 13/07, en production depuis le 15/07."},
+    {"date": "2026-07-21", "change": "Audit de cohérence du registre public : ajout de elo-davidson-wc-v2 (omission depuis la création du 06/07, corrigée), elo-davidson-wc-poisson-mle, elo-davidson-wc-negbin-mle, elo-davidson-wc-ens-mle (migration MLE du 19/07, enregistrés ici avec retard). Mise à jour du statut de elo-davidson-wc-poisson-v2 : backfilling walk-forward complet 104/104 matchs (20/07), branché en production (21/07) — note ajoutée sur la limite de predictor_intl.py (périmètre 'world-cup' uniquement, tournoi terminé, pas de nouvelles données live prévues sans repointage vers un autre calendrier international)."}
   ]
 }

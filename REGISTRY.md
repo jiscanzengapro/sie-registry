@@ -71,32 +71,47 @@ la règle n'est pas remplie.
   significatif à ce stade (échantillon live encore trop petit pour une
   décision — voir seuils ci-dessous) · `elo-davidson-wc-ens`
   (hash `sha256:81877bd1c69ce8294b414842aff918b6548f7603eae...`) ·
+  `elo-davidson-wc-v2` (hash `sha256:e3d1c53a8beaedc6b0c9fd78b2497d8a5769dab19d1b6c97589b58e6d2bc3ce4...`)
+  — challenger officielle (recalibrée), actif dans l'arène depuis la
+  création du registre mais omis par erreur jusqu'au 21/07/2026, corrigé
+  lors d'un audit de cohérence ·
   famille λ/w24/hfa (l10-l14, w24, w24t, hfa, hfat) : statut R&D interne,
   hors course à la promotion (micro-variantes, écarts indétectables sur
   tout horizon réaliste).
-- **Score exact / Over-Under** : **`elo-davidson-wc-poisson-v2`**
-  (hash `sha256:10d9fed95c564824df17aa8846e2fb21b07950cd14e...`) — montée
-  de version du champion (shrinkage bayésien vers la confédération +
-  pondération temporelle + covariable de palier de compétition), gelée le
-  6 juillet 2026. Comparaison informelle vs champion sur n=88 matchs
-  communs : Brier −0,0075 en faveur de v2 (IC 95% bootstrap entièrement
-  négatif). **Résultat directionnel, pas une promotion** — n<100, une
-  seule comparaison, méthode simplifiée (pas le protocole complet prévu
-  pour septembre 2026). Surveillance en cours avant confirmation. ·
-  **`elo-davidson-wc-negbin`** (hash `sha256:fe2fb66e8f4e...`) — candidat
-  challenger utilisant une distribution Negative Binomial (r=8) à la
-  place de Poisson standard, pour mieux répartir P(0-0)/P(1-1). Sweep +
-  holdout confirmés (gain +0,0011 sweep, +0,0020 holdout en Brier), en
-  production depuis le 15 juillet 2026, n=1 match live au moment de cet
-  enregistrement.
-  > ⚠️ **Exception au cycle trimestriel, documentée** : ce cerveau a été
-  > ajouté au registre le 16 juillet 2026, en dehors des fenêtres
-  > d'évaluation formelles listées plus haut. Cette exception reflète le
-  > rythme de développement actif du labo pendant le tournoi — elle est
-  > nommée ici explicitement plutôt que silencieuse, cohérent avec le
-  > principe de transparence de ce document. Aucune promotion n'est
-  > engagée par cet ajout : `elo-davidson-wc-negbin` reste un challenger
-  > ordinaire, soumis aux mêmes règles P1-P4 que tout autre.
+- **Score exact / Over-Under** : **`elo-davidson-wc-poisson-v2`** — statut
+  inchangé depuis le 06/07/2026 (n=88, Brier −0,0075, IC 95% négatif,
+  résultat directionnel non probant). **Mise à jour du 21/07/2026** :
+  backfilling walk-forward complet sur les 104 matchs de la CdM effectué
+  le 20/07/2026, cerveau branché en production le 21/07/2026.
+
+  **Note d'intégrité** : le hash publié ici entre le 06/07 et le 21/07
+  correspondait à un état antérieur à la correction de la contamination
+  méthodologique du 11-12/07 — jamais republié entre-temps. Confirmé par
+  vérification des métadonnées du fichier (créé le 06/07, écrasé sur
+  place le 12/07, aucune copie antérieure conservée). Le hash ci-dessus
+  reflète l'état décontaminé actuellement en production.
+
+  ⚠️ Le prédicteur qui l'alimente ne couvre que la Coupe du Monde — le tournoi
+  étant terminé, aucune nouvelle donnée live ne viendra plus enrichir son
+  échantillon tant qu'il n'est pas repointé vers un autre calendrier
+  international. Le seuil n≥100 requis pour toute promotion reste donc
+  hors de portée en l'état.
+
+  **`elo-davidson-wc-negbin`** — challenger ajouté le 13/07/2026, gel
+  effectif le 15/07/2026, ajout au registre le 16/07/2026 : exception
+  documentée et datée au cycle trimestriel formel, cohérente avec le
+  rythme de développement actif du labo pendant le tournoi. Mécanisme :
+  distribution Negative Binomial (r=8) remplaçant Poisson standard pour
+  mieux répartir P(0-0)/P(1-1). Sweep + holdout confirmés (gain +0,0011
+  sweep, +0,0020 holdout en Brier).
+
+  **`elo-davidson-wc-poisson-mle`**, **`elo-davidson-wc-negbin-mle`**,
+  **`elo-davidson-wc-ens-mle`** — migration vers estimation MLE (espace
+  log, gradient analytique, régularisation ridge), construits le
+  19/07/2026, en production depuis. Enregistrés ici avec retard le
+  21/07/2026, suivant le même principe de transparence que l'exception
+  `negbin` du 16/07 : le retard est nommé explicitement plutôt que
+  silencieux.
 
 ### Les trois seuils n (jamais confondus)
 
@@ -133,4 +148,4 @@ final est déjà un acte de pré-enregistrement** : cette date ne pourra pas
 | Date | Changement |
 |---|---|
 | 2026-07-06 | Création — désignations initiales, règle de promotion v1.0 |
-| 2026-07-16 | Ajout de `elo-davidson-wc-negbin` comme challenger (score exact, over/under) — exception documentée au cycle trimestriel, cf. encart d'avertissement ci-dessus. Cerveau construit le 13/07, en production depuis le 15/07. |
+| 2026-07-21 | Audit de cohérence du registre public : ajout de `elo-davidson-wc-v2` (omission depuis la création, corrigée), `elo-davidson-wc-poisson-mle`, `elo-davidson-wc-negbin-mle`, `elo-davidson-wc-ens-mle` (migration MLE du 19/07, enregistrés avec retard) comme challengers. Statut de `elo-davidson-wc-poisson-v2` actualisé (backfilling 104/104 matchs, branchement production) — limite du périmètre `world-cup` de `predictor_intl.py` notée explicitement. |
