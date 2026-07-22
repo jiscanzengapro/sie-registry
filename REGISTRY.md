@@ -25,6 +25,12 @@ UNIQUEMENT aux fenêtres fixes ci-dessous :
 - **P3** : p-value Holm-ajustée < 0,05 (test unilatéral) ET bootstrap
   concordant (intervalle de confiance ajusté entièrement négatif).
 - **P4** : garde-fou de calibration — ECE du challenger ≤ ECE du champion + 0,01.
+- **P0 (nouveau, 22/07/2026)** : le pipeline de maintenance automatique du
+  challenger (ré-entraînement, backfilling walk-forward, publication du
+  hash) doit être fonctionnel et documenté — un challenger statistiquement
+  significatif mais dont le pipeline n'est plus maintenu (ex. cerveau
+  abandonné après un changement de méthode) est disqualifié,
+  indépendamment de P1 à P4.
 
 Si plusieurs challengers remplissent ces critères à la même fenêtre, le
 meilleur écart de Brier moyen gagne.
@@ -50,9 +56,10 @@ champion ne change pas, seule son estimation est corrigée.
 
 | Marché | Modèle affiché | Hash d'état (SHA-256) | Désigné le | Prochaine revue |
 |---|---|---|---|---|
-| 1X2 | `elo-davidson-wc-v1` | `sha256:61a5362a3c690d097f1acbf5efbdc12b0c47dc5660a...` | 2026-07-06 (référence pré-tournoi, gelée le 27/06/2026) | trêve d'octobre 2026 |
+| 1X2 | `elo-davidson-wc-ens-mle` | `sha256:0f1388161c160faf74a15ae1a50918ae70d7323fc2d7ef64a5b11e2a39aaa392...` | 2026-07-22 (remplace elo-davidson-wc-v1) | trêve d'octobre 2026 |
 | Score exact | `elo-davidson-wc-poisson` | `sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88...` | 2026-07-06 (gelé le 01/07/2026) | trêve d'octobre 2026 |
 | Over/Under | `elo-davidson-wc-poisson` | `sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88...` | 2026-07-06 (gelé le 01/07/2026) | trêve d'octobre 2026 |
+| Distribution des buts | `elo-davidson-wc-poisson` | `sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88...` | 2026-07-22 (première désignation) | trêve d'octobre 2026 |
 
 ### Note de gouvernance — pourquoi v1 est champion
 
@@ -113,6 +120,37 @@ la règle n'est pas remplie.
   `negbin` du 16/07 : le retard est nommé explicitement plutôt que
   silencieux.
 
+### Décision de promotion du 22 juillet 2026
+
+Première vraie promotion de champion depuis la création de ce registre,
+à l'issue du protocole complet P0 à P4.
+
+- **1X2 — `elo-davidson-wc-ens-mle` remplace `elo-davidson-wc-v1`** :
+  écart de Brier moyen −0,0280, p=0,0002 (Holm-ajustée), IC 95%
+  bootstrap [−0,0425 ; −0,0126] (entièrement négatif), ECE 0,0644 contre
+  0,0834 pour l'ancien champion. Les quatre critères P1-P4 sont remplis
+  simultanément ; P0 (pipeline fonctionnel) l'est également —
+  ré-entraînement automatique, backfilling walk-forward et publication
+  du hash tous vérifiés opérationnels pour `ens-mle`.
+- **Distribution des buts — première désignation officielle** :
+  `elo-davidson-wc-poisson` désigné champion sur ce marché, qui n'avait
+  jamais été formellement enregistré dans ce document avant ce jour.
+- **`elo-davidson-wc-ens` (ensemble classique) — NON promu malgré des
+  statistiques favorables** : significatif sur Over/Under (écart
+  −0,0093, p<0,0001) et sur Distribution des buts (écart −0,0052,
+  p=0,0004), donc P1-P4 remplis sur ces deux marchés — mais disqualifié
+  par la nouvelle règle P0, son pipeline de maintenance n'étant plus
+  fonctionnel (abandonné au profit de la migration MLE sans bascule
+  propre du pipeline de production).
+- **`elo-davidson-wc-ens-mle` — NON promu sur Score exact / Over-Under**
+  malgré la promotion sur 1X2 : échoue P3 sur ces marchés (meilleur
+  candidat, p=0,0643 pour un seuil Holm requis de 0,0083 à ce rang).
+- **`elo-davidson-wc-poisson-v2` — statut challenger inchangé** :
+  meilleur Brier brut sur Distribution des buts (0,5031) parmi tous les
+  candidats testés, mais jamais soumis au protocole formel P0-P4 sur ce
+  marché précis — reste challenger documenté, aucune promotion tant que
+  le test complet n'est pas mené.
+
 ### Les trois seuils n (jamais confondus)
 
 | Seuil | Fonction | Ce qu'il autorise |
@@ -149,3 +187,4 @@ final est déjà un acte de pré-enregistrement** : cette date ne pourra pas
 |---|---|
 | 2026-07-06 | Création — désignations initiales, règle de promotion v1.0 |
 | 2026-07-21 | Audit de cohérence du registre public : ajout de `elo-davidson-wc-v2` (omission depuis la création, corrigée), `elo-davidson-wc-poisson-mle`, `elo-davidson-wc-negbin-mle`, `elo-davidson-wc-ens-mle` (migration MLE du 19/07, enregistrés avec retard) comme challengers. Statut de `elo-davidson-wc-poisson-v2` actualisé (backfilling 104/104 matchs, branchement production) — limite du périmètre `world-cup` de `predictor_intl.py` notée explicitement. |
+| 2026-07-22 | Première promotion du roster CdM (`elo-davidson-wc-ens-mle`, marché 1X2) à l'issue du protocole complet P0-P4 — remplace `elo-davidson-wc-v1`. Désignation officielle de `elo-davidson-wc-poisson` sur le marché "Distribution des buts" (jamais enregistré avant ce jour). Ajout de la règle de gouvernance P0 (pipeline de maintenance fonctionnel requis). `elo-davidson-wc-ens` (ensemble classique) et `elo-davidson-wc-poisson-v2` explicitement non promus malgré des statistiques favorables — voir section "Décision de promotion du 22 juillet 2026". |

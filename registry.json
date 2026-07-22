@@ -14,7 +14,9 @@
       "P2_min_brier_gap": -0.005,
       "P3_holm_adjusted_p_max": 0.05,
       "P3_note": "test unilatéral, bootstrap concordant requis (IC ajusté entièrement négatif)",
-      "P4_max_ece_gap": 0.01
+      "P4_max_ece_gap": 0.01,
+      "P0_pipeline_maintenance_requis": true,
+      "P0_note": "le pipeline de mise à jour walk-forward du candidat doit être fonctionnel et vérifié au moment de la décision — ajouté le 22/07/2026 suite à la découverte qu'un candidat statistiquement validé (ens classique) avait un pipeline de maintenance cassé"
     },
     "emergency_brake": "gel immédiat si Brier glissant du champion sur 100 matchs > plancher naïf",
     "version_upgrade_distinct_from_promotion": true,
@@ -31,9 +33,9 @@
       "status": "labo, non commercialisé",
       "markets": {
         "1X2": {
-          "champion_model_key": "elo-davidson-wc-v1",
-          "champion_hash": "sha256:61a5362a3c690d097f1acbf5efbdc12b0c47dc5660a",
-          "designated_at": "2026-07-06",
+          "champion_model_key": "elo-davidson-wc-ens-mle",
+          "champion_hash": "sha256:0f1388161c160faf74a15ae1a50918ae70d7323fc2d7ef64a5b11e2a39aaa392",
+          "designated_at": "2026-07-22",
           "frozen_at": "2026-06-27",
           "designation_reason": "désigné avant l'existence des challengers, pas mesuré meilleur",
           "next_review": "trêve d'octobre 2026",
@@ -57,13 +59,21 @@
               "correction_note": "Cerveau existant et actif dans predictor_intl.py depuis la création du registre (06/07/2026) — son absence ici jusqu'à ce jour était un oubli d'enregistrement, pas une exclusion voulue. Corrigé le 21/07/2026, découvert lors d'un audit de cohérence du registre public."
             },
             {
-              "model_key_family": ["elo-davidson-wc-l10", "elo-davidson-wc-l11",
-                "elo-davidson-wc-l12", "elo-davidson-wc-l13", "elo-davidson-wc-l14",
-                "elo-davidson-wc-w24", "elo-davidson-wc-w24t",
-                "elo-davidson-wc-hfa", "elo-davidson-wc-hfat"],
+              "model_key_family": [
+                "elo-davidson-wc-l10",
+                "elo-davidson-wc-l11",
+                "elo-davidson-wc-l12",
+                "elo-davidson-wc-l13",
+                "elo-davidson-wc-l14",
+                "elo-davidson-wc-w24",
+                "elo-davidson-wc-w24t",
+                "elo-davidson-wc-hfa",
+                "elo-davidson-wc-hfat"
+              ],
               "status": "R&D interne, hors course à la promotion"
             }
-          ]
+          ],
+          "previous_champion": "elo-davidson-wc-v1"
         },
         "score_exact": {
           "champion_model_key": "elo-davidson-wc-poisson",
@@ -78,7 +88,10 @@
               "status": "montée de version en surveillance",
               "informal_test_n": 88,
               "informal_test_brier_gap": -0.0075,
-              "informal_test_ci_95": [-0.0130, -0.0020],
+              "informal_test_ci_95": [
+                -0.013,
+                -0.002
+              ],
               "informal_test_note": "résultat directionnel du 06/07/2026, pas une promotion (n<100, méthode simplifiée) — inchangé depuis",
               "update_20260721": "Note d'intégrité : le hash publié entre le 06/07 et le 21/07 (sha256:10d9fed9...) correspondait à un état antérieur à la correction de la contamination méthodologique du 11-12/07/2026 (cf. reentraînement, coupure stricte ajoutée) — jamais republié entre-temps sur ce registre. Confirmé par vérification directe des métadonnées du fichier (date de création 06/07, dernière modification 12/07 — écrasement sur place, aucune copie de l'ancienne version conservée). Le hash actuel (sha256:b5684ab4...) correspond à l'état décontaminé, celui réellement utilisé pour le backfilling du 20/07 et la production depuis le 21/07. Backfilling walk-forward complet sur 104/104 matchs CdM effectué le 20/07/2026. Branché dans predictor_intl.py/STATE_FILES le 21/07/2026 (absent du dépôt de code jusque-là — jamais poussé, cause racine corrigée). ATTENTION : predictor_intl.py ne prédit que la compétition 'world-cup' ; la Coupe du Monde étant terminée, aucun nouveau match live ne viendra plus alimenter ce cerveau via ce prédicteur tant qu'il n'est pas repointé vers un autre calendrier international. L'échantillon informel reste donc figé à n=88, sans progression prévue vers le seuil n≥100 à ce stade."
             },
@@ -123,7 +136,9 @@
               "n_live_at_registration": "103-104 (fin de tournoi)",
               "exception_note": "Voir note complète sur poisson-mle — même retard d'enregistrement, même principe de transparence."
             }
-          ]
+          ],
+          "reviewed_at": "2026-07-22",
+          "reviewed_note": "aucun candidat significatif après correction de Holm (meilleur : ens-mle, p=0.0643, seuil requis 0.0083)"
         },
         "over_under": {
           "champion_model_key": "elo-davidson-wc-poisson",
@@ -164,6 +179,20 @@
               "status": "challenger — voir détails dans la section score_exact",
               "registry_note_added_at": "2026-07-21"
             }
+          ],
+          "reviewed_at": "2026-07-22",
+          "reviewed_note": "elo-davidson-wc-ens significatif (delta -0.0093, p<0.0001, ECE conforme) mais disqualifié par la nouvelle règle P0 (pipeline de maintenance non fonctionnel pour ce format) — voir revision_history"
+        },
+        "nb_buts_distribution": {
+          "champion_model_key": "elo-davidson-wc-poisson",
+          "champion_hash": "sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88",
+          "designated_at": "2026-07-22",
+          "designation_note": "première désignation officielle de ce marché, jamais enregistré avant ce jour",
+          "challengers": [
+            {
+              "model_key": "elo-davidson-wc-ens",
+              "status": "significatif (delta -0.0052, p=0.0004) mais disqualifié par P0"
+            }
           ]
         }
       }
@@ -191,8 +220,21 @@
     }
   },
   "revision_history": [
-    {"date": "2026-07-06", "change": "Création — désignations initiales, règle de promotion v1.0"},
-    {"date": "2026-07-16", "change": "Ajout de elo-davidson-wc-negbin comme challenger (score_exact, over_under) — exception documentée au cycle trimestriel, cf. exception_note. Cerveau construit le 13/07, en production depuis le 15/07."},
-    {"date": "2026-07-21", "change": "Audit de cohérence du registre public : ajout de elo-davidson-wc-v2 (omission depuis la création du 06/07, corrigée), elo-davidson-wc-poisson-mle, elo-davidson-wc-negbin-mle, elo-davidson-wc-ens-mle (migration MLE du 19/07, enregistrés ici avec retard). Mise à jour du statut de elo-davidson-wc-poisson-v2 : backfilling walk-forward complet 104/104 matchs (20/07), branché en production (21/07) — note ajoutée sur la limite de predictor_intl.py (périmètre 'world-cup' uniquement, tournoi terminé, pas de nouvelles données live prévues sans repointage vers un autre calendrier international)."}
+    {
+      "date": "2026-07-06",
+      "change": "Création — désignations initiales, règle de promotion v1.0"
+    },
+    {
+      "date": "2026-07-16",
+      "change": "Ajout de elo-davidson-wc-negbin comme challenger (score_exact, over_under) — exception documentée au cycle trimestriel, cf. exception_note. Cerveau construit le 13/07, en production depuis le 15/07."
+    },
+    {
+      "date": "2026-07-21",
+      "change": "Audit de cohérence du registre public : ajout de elo-davidson-wc-v2 (omission depuis la création du 06/07, corrigée), elo-davidson-wc-poisson-mle, elo-davidson-wc-negbin-mle, elo-davidson-wc-ens-mle (migration MLE du 19/07, enregistrés ici avec retard). Mise à jour du statut de elo-davidson-wc-poisson-v2 : backfilling walk-forward complet 104/104 matchs (20/07), branché en production (21/07) — note ajoutée sur la limite de predictor_intl.py (périmètre 'world-cup' uniquement, tournoi terminé, pas de nouvelles données live prévues sans repointage vers un autre calendrier international)."
+    },
+    {
+      "date": "2026-07-22",
+      "change": "Première vraie promotion du roster CdM à l'issue du protocole complet P1-P4 sur les 4 marchés (n=104 matchs live appariés walk-forward, test t + bootstrap Holm-corrigé, calibration ECE). Ajout de la règle P0 (pipeline de maintenance fonctionnel requis). elo-davidson-wc-ens-mle promu champion 1X2, remplaçant elo-davidson-wc-v1 (delta Brier -0.0280, p=0.0002, IC bootstrap [-0.0425;-0.0126], ECE 0.0644 vs 0.0834). Sur score_exact, over_under et nb_buts_distribution, elo-davidson-wc-poisson reste/devient champion : elo-davidson-wc-ens (classique) était statistiquement significatif et mieux calibré sur over_under et distribution (delta -0.0093 et -0.0052, tous deux significatifs après Holm, ECE conforme), mais disqualifié par P0 — son pipeline de mise à jour walk-forward (update_ensemble_tournoi.py) s'est révélé non fonctionnel pour son format de sous-composante Poisson (KeyError découvert le 22/07, jamais corrigé). elo-davidson-wc-ens-mle, malgré son pipeline fonctionnel, a échoué P3 sur ces deux mêmes marchés (non significatif face à poisson). elo-davidson-wc-poisson-v2 était également compétitif sur nb_buts (meilleur Brier brut du tournoi, 0.5031) mais jamais formellement testé au protocole complet — reste challenger, aucune promotion sur simple Brier brut. elo-davidson-wc-poisson désigné pour la première fois comme référence officielle du marché nb_buts_distribution."
+    }
   ]
 }
