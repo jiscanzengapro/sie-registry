@@ -56,10 +56,10 @@ champion ne change pas, seule son estimation est corrigée.
 
 | Marché | Modèle affiché | Hash d'état (SHA-256) | Désigné le | Prochaine revue |
 |---|---|---|---|---|
-| 1X2 | `elo-davidson-wc-ens-mle` | `sha256:0f1388161c160faf74a15ae1a50918ae70d7323fc2d7ef64a5b11e2a39aaa392...` | 2026-07-22 (remplace elo-davidson-wc-v1) | trêve d'octobre 2026 |
-| Score exact | `elo-davidson-wc-poisson` | `sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88...` | 2026-07-06 (gelé le 01/07/2026) | trêve d'octobre 2026 |
-| Over/Under | `elo-davidson-wc-poisson` | `sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88...` | 2026-07-06 (gelé le 01/07/2026) | trêve d'octobre 2026 |
-| Distribution des buts | `elo-davidson-wc-poisson` | `sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88...` | 2026-07-22 (première désignation) | trêve d'octobre 2026 |
+| 1X2 | `elo-davidson-intl-ens-mle` | `sha256:0db2195fc648fe872d53ab5ee9a579b3de17f7812499d6499efe1cdff229c98f...` | 2026-07-22 (remplace elo-davidson-wc-v1), renommé le 24/07/2026 (hash corrigé, voir "Renommage CdM → International") | trêve d'octobre 2026 |
+| Score exact | `elo-davidson-intl-poisson` | `sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88...` | 2026-07-06 (gelé le 01/07/2026), renommé le 24/07/2026 | trêve d'octobre 2026 |
+| Over/Under | `elo-davidson-intl-poisson` | `sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88...` | 2026-07-06 (gelé le 01/07/2026), renommé le 24/07/2026 | trêve d'octobre 2026 |
+| Distribution des buts | `elo-davidson-intl-poisson` | `sha256:124b87ed808e2955e0eace897c4bfa02c00c4ba3c88...` | 2026-07-22 (première désignation), renommé le 24/07/2026 | trêve d'octobre 2026 |
 
 ### Note de gouvernance — pourquoi v1 est champion
 
@@ -151,6 +151,58 @@ Première vraie promotion de champion depuis la création de ce registre,
   marché précis — reste challenger documenté, aucune promotion tant que
   le test complet n'est pas mené.
 
+## Renommage CdM → International (24 juillet 2026)
+
+**Pourquoi** : les cerveaux du roster CdM sont en réalité entraînés sur
+tout l'historique international (~50 000 matchs, toutes compétitions
+depuis 1872), pas seulement la Coupe du Monde. Ce renommage est
+anticipatif, en vue du repointage du collecteur vers la prochaine
+fenêtre internationale mondiale (21 septembre-6 octobre 2026), prévu à
+partir du 22 août 2026.
+
+**Méthode** : filiation explicite, jamais de renommage en place — les
+19 cerveaux `-wc-*` originaux restent intacts (fichiers, hashs, lignes
+de prédictions historiques), jamais modifiés ni supprimés. 19 nouveaux
+cerveaux `-intl-*` ont été créés comme identités successeurs, avec de
+nouveaux hashs calculés sur le même contenu (sauf correction du bug
+d'intégrité ci-dessous).
+
+| Cerveau historique (`-wc-*`) | Cerveau canonique (`-intl-*`) | Note |
+|---|---|---|
+| `elo-davidson-wc-v1` | `elo-davidson-intl-v1` | |
+| `elo-davidson-wc-v2` | `elo-davidson-intl-v2` | |
+| `elo-davidson-wc-l10` | `elo-davidson-intl-l10` | |
+| `elo-davidson-wc-l11` | `elo-davidson-intl-l11` | |
+| `elo-davidson-wc-l12` | `elo-davidson-intl-l12` | |
+| `elo-davidson-wc-l13` | `elo-davidson-intl-l13` | |
+| `elo-davidson-wc-l14` | `elo-davidson-intl-l14` | |
+| `elo-davidson-wc-w24` | `elo-davidson-intl-w24` | |
+| `elo-davidson-wc-w24t` | `elo-davidson-intl-w24t` | |
+| `elo-davidson-wc-hfa` | `elo-davidson-intl-hfa` | |
+| `elo-davidson-wc-hfat` | `elo-davidson-intl-hfat` | |
+| `elo-davidson-wc-gd` | `elo-davidson-intl-gd` | |
+| `elo-davidson-wc-poisson` | `elo-davidson-intl-poisson` | |
+| `elo-davidson-wc-poisson-mle` | `elo-davidson-intl-poisson-mle` | hash corrigé le 24/07 — voir note d'intégrité ci-dessous |
+| `elo-davidson-wc-poisson-v2` | `elo-davidson-intl-poisson-v2` | |
+| `elo-davidson-wc-negbin` | `elo-davidson-intl-negbin` | |
+| `elo-davidson-wc-negbin-mle` | `elo-davidson-intl-negbin-mle` | hash corrigé le 24/07 — voir note d'intégrité ci-dessous |
+| `elo-davidson-wc-ens` | `elo-davidson-intl-ens` | |
+| `elo-davidson-wc-ens-mle` | `elo-davidson-intl-ens-mle` | hash corrigé le 24/07 — voir note d'intégrité ci-dessous |
+
+**Note d'intégrité — bug de nommage MLE corrigé** : découvert le
+24/07/2026 en préparant ce renommage, les 3 cerveaux migrés vers la
+vraie MLE le 19/07 (`poisson-mle`, `negbin-mle`, `ens-mle`) avaient un
+champ `model_key` interne erroné dans leur fichier d'état JSON
+(pointant vers le nom classique sans le suffixe `-mle`) — une erreur
+de construction jamais détectée depuis leur création, sans conséquence
+pratique connue (le nom de fichier et toutes les entrées en base
+utilisaient déjà le bon nom complet). Corrigé le 24/07/2026, entraînant
+un nouveau hash pour ces 3 cerveaux :
+
+- `poisson-mle` : ancien hash erroné `sha256:65d610142822c336a24cc2345bcda030c261556c5cdb3dc1bd9ac7915308757b...` → nouveau hash correct `sha256:aba0aa5fe360d675b5176cfe50e8fb340158c22c8b92a55707bcdb2bc09e0848...`
+- `negbin-mle` : ancien hash erroné `sha256:7222a586cdc0e3952a8707cbba45153458a9d7fa0681668848fb34d31c6deb6e...` → nouveau hash correct `sha256:d071c78bfd40c2c31a1851388aaf6799862786ea872738ef166c565588ec74fa...`
+- `ens-mle` : ancien hash erroné `sha256:3c585db4807060eb74ab44b79762409734a9d074c6814c0856aea15b46ec407f...` → nouveau hash correct `sha256:0db2195fc648fe872d53ab5ee9a579b3de17f7812499d6499efe1cdff229c98f...` (ce dernier était déjà publié comme champion 1X2 depuis le 22/07/2026).
+
 ### Les trois seuils n (jamais confondus)
 
 | Seuil | Fonction | Ce qu'il autorise |
@@ -188,3 +240,4 @@ final est déjà un acte de pré-enregistrement** : cette date ne pourra pas
 | 2026-07-06 | Création — désignations initiales, règle de promotion v1.0 |
 | 2026-07-21 | Audit de cohérence du registre public : ajout de `elo-davidson-wc-v2` (omission depuis la création, corrigée), `elo-davidson-wc-poisson-mle`, `elo-davidson-wc-negbin-mle`, `elo-davidson-wc-ens-mle` (migration MLE du 19/07, enregistrés avec retard) comme challengers. Statut de `elo-davidson-wc-poisson-v2` actualisé (backfilling 104/104 matchs, branchement production) — limite du périmètre `world-cup` de `predictor_intl.py` notée explicitement. |
 | 2026-07-22 | Première promotion du roster CdM (`elo-davidson-wc-ens-mle`, marché 1X2) à l'issue du protocole complet P0-P4 — remplace `elo-davidson-wc-v1`. Désignation officielle de `elo-davidson-wc-poisson` sur le marché "Distribution des buts" (jamais enregistré avant ce jour). Ajout de la règle de gouvernance P0 (pipeline de maintenance fonctionnel requis). `elo-davidson-wc-ens` (ensemble classique) et `elo-davidson-wc-poisson-v2` explicitement non promus malgré des statistiques favorables — voir section "Décision de promotion du 22 juillet 2026". |
+| 2026-07-24 | Renommage complet du roster CdM vers "International" (`elo-davidson-wc-*` → `elo-davidson-intl-*`), 19 cerveaux, par filiation explicite (aucune donnée historique modifiée ni supprimée, voir section "Renommage CdM → International"). Correction d'un bug d'intégrité découvert au passage : les 3 cerveaux MLE (`poisson-mle`, `negbin-mle`, `ens-mle`) avaient un `model_key` interne erroné depuis leur création le 19/07, jamais détecté avant ce jour, corrigé avec republication de leurs 3 hashs. Le champion 1X2 (précédemment `elo-davidson-wc-ens-mle`) est renommé `elo-davidson-intl-ens-mle`, avec son nouveau hash corrigé. |
